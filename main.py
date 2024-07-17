@@ -16,16 +16,18 @@ fig_format = 'png'  # Format used for saving matplotlib's figures
 # fig_format = 'svg'
 # Defining PSO hyperparameters
 hyperparams = Params()
-hyperparams.num_particles = 60
-hyperparams.inertia_weight = 0.2
+hyperparams.num_particles = 40
+hyperparams.inertia_weight = 0.4
 hyperparams.cognitive_parameter = 0.6
 hyperparams.social_parameter = 0.8
-lower_bound = np.array([30, 0.0, 0.0])
-upper_bound = np.array([100, 10, 10.0])
+lower_bound_x = np.array([ 0, 100.0])
+upper_bound_x = np.array([ 3, 150.0])
+lower_bound_theta = np.array([ 0, 100.0])
+upper_bound_theta = np.array([ 5, 150.0])
 # lower_bound = np.array([10.0, 0.0, 0.0])
 # upper_bound = np.array([200.0, 1300.0, 30.0])
-pso = ParticleSwarmOptimization(hyperparams, lower_bound, upper_bound)
-pso_theta = ParticleSwarmOptimization(hyperparams, lower_bound, upper_bound)
+pso = ParticleSwarmOptimization(hyperparams, lower_bound_x, upper_bound_x)
+pso_theta = ParticleSwarmOptimization(hyperparams, lower_bound_theta,upper_bound_theta)
 def plot_results():
 	"""
 	Plots the results of the optimization.
@@ -33,7 +35,7 @@ def plot_results():
 	fig_format = 'png'
 	plt.figure()
 	plt.plot(position_x_history)
-	plt.legend(['Kp', 'Ki', 'Kd'])
+	plt.legend(['Kp', 'Kd'])
 	plt.xlabel('Iteration')
 	plt.ylabel('Parameter Value')
 	plt.title('Parameters Convergence For Horizontal Control')
@@ -42,7 +44,7 @@ def plot_results():
 
 	plt.figure()
 	plt.plot(position_theta_history)
-	plt.legend(['Kp', 'Ki', 'Kd'])
+	plt.legend(['Kp', 'Kd'])
 	plt.xlabel('Iteration')
 	plt.ylabel('Parameter Value')
 	plt.title('Parameters Convergence for Theta Control')
@@ -98,15 +100,6 @@ control_posic = PIDController(1, 0, 100, 1)
 
 
 for episodes in range(1, NUM_EPISODES + 1):
-	# Reset the environment
-	# position = pso.get_position_to_evaluate()
-	# controller_params = convert_particle_position_to_params(position)
-	# control_posic.set_gains(controller_params.kp, controller_params.ki, controller_params.kd)
-
-	# position_theta = pso_theta.get_position_to_evaluate()
-	# controller_params_theta = convert_particle_position_to_params(position_theta)
-	# control_theta.set_gains(controller_params_theta.kp, controller_params_theta.ki, controller_params_theta.kd)
-
 
 	state = env.reset()
 	# This reshape is needed to keep compatibility with Keras
@@ -133,22 +126,21 @@ for episodes in range(1, NUM_EPISODES + 1):
 
 	pso_theta.notify_evaluation(cumulative_reward)
 	pso.notify_evaluation(cumulative_reward)
-	if episodes % hyperparams.num_particles == 0:
-		pso.advance_generation()
-		pso_theta.advance_generation()
-		best_posic = pso.get_best_position()
-		best_theta = pso_theta.get_best_position()
-		position_x_history.append(np.array(best_posic))
-		position_theta_history.append(np.array(best_theta))
+	pso.advance_generation()
+	pso_theta.advance_generation()
+	best_posic = pso.get_best_position()
+	best_theta = pso_theta.get_best_position()
+	position_x_history.append(np.array(best_posic))
+	position_theta_history.append(np.array(best_theta))
   
 	position = pso.get_position_to_evaluate()
 	controller_params = convert_particle_position_to_params(position)
-	control_posic.set_gains(controller_params.kp, controller_params.ki, controller_params.kd)
+	control_posic.set_gains(controller_params.kp, 0, controller_params.kd)
 
 	position_theta = pso_theta.get_position_to_evaluate()
 	controller_params_theta = convert_particle_position_to_params(position_theta)
-	control_theta.set_gains(controller_params_theta.kp, controller_params_theta.ki, controller_params_theta.kd)
-# plot_results()
+	control_theta.set_gains(controller_params_theta.kp, 0, controller_params_theta.kd)
+plot_results()
 plt.pause(1.0)
 
 #visualize 
