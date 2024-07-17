@@ -107,8 +107,8 @@ def convert_particle_position_to_params(position):
 	"""
 	params = Params()
 	params.kp = position[0]
-	params.kd = position[1]
-	# params.ki = position[1]
+	params.ki = position[1]
+	params.kd = position[2]
 	return params
 
 
