@@ -8,12 +8,7 @@ class PIDController:
 		self.ki = ki
 		self.kd = kd
 		self.sample_time = sample_time
-		self.b2 = (ki*sample_time**2 + kd +kp*sample_time**2)/sample_time
-		self.b1 = (-2*kd-2*kp*sample_time)/sample_time
-		self.b0 = -kd/sample_time
-		self.u1 = 0.0
 		self.e1 = 0.0
-		self.e2 = 0.0
 		self.integral = 0.0
 		
 	def control(self, error):
@@ -24,7 +19,8 @@ class PIDController:
 		# Atualizando o erro anterior
 		self.e1 = error
 		# Calculando a saída do PID
-		u = self.kp * error + self.ki * self.integral + self.kd * derivative
+		# u = self.kp * error + self.ki * self.integral + self.kd * derivative
+		u = self.kp * error + self.kd * derivative
 		return u
 	
 	def set_gains(self,kp,ki,kd):
@@ -37,5 +33,5 @@ class PIDController:
 		error_posic = POSITION_REF - state[0]
 		error_theta = THETA_REF - state[2]
 		
-		action = 1 if(control_theta.control(error_theta) + control_posic.control(error_posic) < 0) else 0
+		action = 1 if control_theta.control(error_theta) + control_posic.control(error_posic) < 0  else 0
 		return action
