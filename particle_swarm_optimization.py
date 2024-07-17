@@ -2,7 +2,6 @@ import numpy as np
 import random
 from math import inf
 
-import utils
 
 
 class Particle:
@@ -18,7 +17,6 @@ class Particle:
         :param upper_bound: upper bound of the particle position.
         :type upper_bound: numpy array.
         """
-        # Todo: implement
         self.pos = np.random.uniform(lower_bound, upper_bound)
         vel_min = lower_bound - upper_bound
         vel_max = upper_bound - lower_bound
@@ -43,7 +41,6 @@ class ParticleSwarmOptimization:
     :type upper_bound: numpy array.
     """
     def __init__(self, hyperparams, lower_bound, upper_bound):
-        # Todo: implement
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
         self.vel_min = lower_bound - upper_bound
@@ -59,6 +56,12 @@ class ParticleSwarmOptimization:
         for i in range(self.num):
             self.particles.append(Particle(lower_bound, upper_bound))
 
+    
+    def reset_hyperparams(self,hyperparams):
+        self.phip = hyperparams.cognitive_parameter
+        self.phig = hyperparams.social_parameter
+        self.w = hyperparams.inertia_weight
+    
     def get_best_position(self):
         """
         Obtains the best position so far found by the algorithm.
@@ -66,8 +69,7 @@ class ParticleSwarmOptimization:
         :return: the best position.
         :rtype: numpy array.
         """
-        # Todo: implement
-        return self.global_best_pos  # Remove this line
+        return self.global_best_pos 
 
     def get_best_value(self):
         """
@@ -76,8 +78,7 @@ class ParticleSwarmOptimization:
         :return: value of the best position.
         :rtype: float.
         """
-        # Todo: implement
-        return self.global_best_value  # Remove this line
+        return self.global_best_value 
 
     def get_position_to_evaluate(self):
         """
@@ -86,14 +87,12 @@ class ParticleSwarmOptimization:
         :return: position to evaluate.
         :rtype: numpy array.
         """
-        # Todo: implement
-        return self.particles[self.cont].pos  # Remove this line
+        return self.particles[self.cont].pos  
 
     def advance_generation(self):
         """
         Advances the generation of particles. Auxiliary method to be used by notify_evaluation().
         """
-        # Todo: implement
         for i in range(self.num):
             rp = random.uniform(0.0, 1.0)
             rg = random.uniform(0.0, 1.0)
@@ -118,7 +117,6 @@ class ParticleSwarmOptimization:
         :param value: quality of the particle position.
         :type value: float.
         """
-        # Todo: implement
         if value > self.particles[self.cont].best_value:
             self.particles[self.cont].best_value = value
             self.particles[self.cont].best_pos = self.particles[self.cont].pos
