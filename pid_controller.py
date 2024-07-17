@@ -64,6 +64,5 @@ class PIDController:
 		"""
 		error_posic = POSITION_REF - state[0]
 		error_theta = THETA_REF - state[2]
-
 		action = 1 if control_theta.control(error_theta) + control_posic.control(error_posic) < 0  else 0
 		return action
