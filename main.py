@@ -143,9 +143,9 @@ for episodes in range(1, NUM_EPISODES + 1):
 		cumulative_reward += reward
 		state = next_state
 		if done or truncated:
-			print("episode: {}/{}, time(score): {:.6}"
-				  .format(episodes, NUM_EPISODES, cumulative_reward))
 			break
+	print("episode: {}/{}, time(score): {:.6}"
+				  .format(episodes, NUM_EPISODES, cumulative_reward))
 	quality_history.append(cumulative_reward)
 
 	pso_theta.notify_evaluation(cumulative_reward)
