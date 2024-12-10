@@ -35,7 +35,7 @@ def adjust_inertia_weight(iteration, max_iterations):
     Returns:
         float: The adjusted inertia weight.
     """
-	return INITIAL_INERTIA_WEIGHT - (INITIAL_INERTIA_WEIGHT - FINAL_INERTIA_WEIGHT) * (0.1*iteration / max_iterations)
+	return INITIAL_INERTIA_WEIGHT + (-INITIAL_INERTIA_WEIGHT + FINAL_INERTIA_WEIGHT) * (0.1*iteration / max_iterations)
 
 def adjust_cognitive_social_parameters(iteration, max_iterations):
 	"""
