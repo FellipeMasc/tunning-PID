@@ -3,3 +3,4 @@ dqn_agent.py
 evaluate_dqn.py
 train_dqn.py
 *pyc
+*zip
